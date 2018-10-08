@@ -1,0 +1,62 @@
+package cn.edu.bit.cs;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+public class WordCount 
+{
+	public static void main(String[] args)throws Exception{
+		BufferedReader br=new BufferedReader(new FileReader("D:\\Java源码\\文字统计\\英文文本.txt"));
+		//读入文本操作
+		List<String> lists=new ArrayList<String>();
+		String readline=null;
+		while ((readline=br.readLine())!=null)
+		{
+			String[] wordsArr1=readline.split("[^a-zA-Z]");//除去不是字母的
+			for (String word:wordsArr1)
+			{
+				if(word.length()!=0)//除去为零的行
+				{
+					lists.add(word);//插入字符
+				}
+			}
+			
+		}
+		br.close();
+		Map<String, Integer>wordsCount=new TreeMap<String,Integer>();//key为相应的字符串，value为相应的出现的次数
+		for (String li:lists)
+		{
+			if(wordsCount.get(li)!=null)//说明已经出现过
+			{
+				wordsCount.put(li, wordsCount.get(li)+1);//相应的value值加1
+			}
+			else
+			{
+				wordsCount.put(li, 1);//未出现过则将次数记为1
+			}
+		}
+		
+		SortMap(wordsCount);
+	
+	}
+	public static void SortMap(Map<String, Integer> oldmap)//用于排序的函数
+	{
+		ArrayList<Map.Entry<String,Integer>>list=new ArrayList<Map.Entry<String,Integer>>(oldmap.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			@Override
+			public int compare(Entry<String, Integer>o1,Entry<String, Integer>o2)
+			{
+				return o2.getValue()-o1.getValue();//根据降序进行排序
+			}
+		});
+		for (int i=0;i<list.size();i++)
+		{
+			System.out.println(list.get(i).getKey()+":"+list.get(i).getValue());
+		}
+	}
+}
